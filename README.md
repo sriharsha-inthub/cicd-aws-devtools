@@ -48,6 +48,7 @@ OR
 
 > *aws codebuild start-build --project-name=<<!codebuild-project-name>> --environment-variables-override name=TF_ACTION_CMD,value=apply*
 > *aws codebuild start-build --project-name=<<!codebuild-project-name>> --environment-variables-override name=TF_AUTO_APPROVE,value=true*
+> *aws codebuild start-build --project-name <<!codebuild-project-name>> --environment-variables-override name=TF_AUTO_APPROVE,value=true name=TF_ACTION_CMD,value=destroy*
 
 ## Build using AWS Developer tools
 

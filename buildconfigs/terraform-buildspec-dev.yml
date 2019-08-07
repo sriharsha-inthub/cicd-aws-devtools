@@ -68,6 +68,7 @@ phases:
             terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
           else
             echo "##### Cannot destroy with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
+          fi
         else
           echo "############ Cannot execute terraform command $TF_ACTION_CMD"
         fi
