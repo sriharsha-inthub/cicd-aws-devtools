@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    TF_VAR_FILE: "1az/1az.tfvars --auto-approve"
+    TF_VAR_FILE: "1az/1az.tfvars"
     TF_COMMAND: "plan"
     AWS_REGION: "ap-southeast-2"
   parameter-store:
