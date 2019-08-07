@@ -6,7 +6,6 @@
 *.tfstate.*
 *.todo
 *.log
-*.json
 **/*.pem
 **/.terraform
 **/terraform.tfstate
