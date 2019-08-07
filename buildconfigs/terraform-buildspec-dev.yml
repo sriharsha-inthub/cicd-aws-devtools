@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    TF_VAR_FILE: "1az/1az.tfvars"
+    TF_VAR_FILE: "1az/1az-dev.tfvars"
     TF_COMMAND: "plan"
     AWS_REGION: "ap-southeast-2"
   parameter-store:
@@ -51,7 +51,6 @@ phases:
     commands:
       - echo "Validating terraform config files"
       - terraform validate
-      - ls -lart
       - terraform $TF_COMMAND --var-file $TF_VAR_FILE
       - echo "======================================"
   post_build:
