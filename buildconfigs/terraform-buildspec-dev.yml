@@ -5,6 +5,7 @@ env:
     TF_VAR_FILE: "1az/1az-dev.tfvars"
     TF_COMMAND: "plan"
     TF_ACTION_CMD: "apply"
+    TF_AUTO_APPROVE: "false"
     AWS_REGION: "ap-southeast-2"
   parameter-store:
     KEY: /CodeBuild/KEY
@@ -54,9 +55,18 @@ phases:
       - terraform validate
       - terraform $TF_COMMAND --var-file $TF_VAR_FILE
       - |
-        if [[ "$TF_ACTION_CMD" == "apply" ] || [ "$TF_ACTION_CMD" == "destroy" ]]; then
-          echo "############ terraform $TF_COMMAND --var-file $TF_VAR_FILE --auto-approve"
-          terraform $TF_COMMAND --var-file $TF_VAR_FILE --auto-approve
+        if [ "$TF_ACTION_CMD" == "apply" && "$TF_AUTO_APPROVE" == "true" ]; then
+          echo "############ terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve"
+          terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
+        else
+          echo "##### Cannot apply with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
+        fi
+      - |
+        if [ "$TF_ACTION_CMD" == "destroy" && "$TF_AUTO_APPROVE" == "true" ]; then
+          echo "############ terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve"
+          terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
+        else
+          echo "##### Cannot destroy with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
         fi
       - echo "======================================"
   post_build:
