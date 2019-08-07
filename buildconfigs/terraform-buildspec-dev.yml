@@ -55,14 +55,14 @@ phases:
       - terraform validate
       - terraform $TF_COMMAND --var-file $TF_VAR_FILE
       - |
-        if [ "$TF_ACTION_CMD" == "apply" && "$TF_AUTO_APPROVE" == "true" ]; then
+        if [[ "$TF_ACTION_CMD" == "apply" ] && [ "$TF_AUTO_APPROVE" == "true" ]]; then
           echo "############ terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve"
           terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
         else
           echo "##### Cannot apply with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
         fi
       - |
-        if [ "$TF_ACTION_CMD" == "destroy" && "$TF_AUTO_APPROVE" == "true" ]; then
+        if [[ "$TF_ACTION_CMD" == "destroy" ] && [ "$TF_AUTO_APPROVE" == "true" ]]; then
           echo "############ terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve"
           terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
         else

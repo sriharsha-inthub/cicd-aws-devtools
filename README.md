@@ -46,8 +46,8 @@ OR
 
 > ```aws codebuild start-build --project-name=test-codebuild-prj```
 
-> *aws codebuild start-build --project-name=<<!codebuild-project-name>> --environment-variables-override name=TF_ACTION_CMD,value=apply,type=string *
-> *aws codebuild start-build --project-name=<<!codebuild-project-name>> --environment-variables-override name=TF_AUTO_APPROVE,value=true,type=string *
+> *aws codebuild start-build --project-name=<<!codebuild-project-name>> --environment-variables-override name=TF_ACTION_CMD,value=apply*
+> *aws codebuild start-build --project-name=<<!codebuild-project-name>> --environment-variables-override name=TF_AUTO_APPROVE,value=true*
 
 ## Build using AWS Developer tools
 
