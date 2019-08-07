@@ -1,0 +1,73 @@
+version: 0.2
+
+env:
+  variables:
+    EFS_DIR: "/efs"
+    MAVEN_HOME: ".m2"
+    EFS_DNS: "fs-d6bef1ef.efs"
+    EFS_DNS_FULL: "fs-d6bef1ef.efs.ap-southeast-2.amazonaws.com"
+    EFS_IP_ZONE_2A: "10.0.0.11"
+    EFS_IP_ZONE_2B: "10.0.0.26"
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+    APP_NAME: "tempapi-v1"
+    MULE_VERSION: "4.1.5"
+    CLOUDHUB_ENV: "Sandbox"
+  parameter-store:
+    CLOUDHUB_USERNAME: /CodeBuild/cloudhub_user
+    CLOUDHUB_PASSWORD: /CodeBuild/cloudhub_pass
+    BUILD_NUMBER: /CodeBuild/muleapps/buildnumber
+phases:
+  install:
+    run-as: root
+    runtime-versions:
+      java: openjdk8
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Setup Elasic file system(mounting)... "
+      - mkdir -p $EFS_DIR
+      - apt-get update && apt-get install -y nfs-common
+    finally:
+      - echo "End of install phase."
+  pre_build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Mounting efs with nfs"
+      - echo "$EFS_DNS_FULL:/ $EFS_DIR nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0" >> /etc/fstab
+      - mount -a -t efs defaults
+      - mount -t nfs4 -o vers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport $EFS_DNS_FULL:/ $EFS_DIR
+      - mkdir -p $EFS_DIR/$MAVEN_HOME/
+      - echo " ============================================================================================================== "
+      - echo "Mule app - temperature-api - Build Initiated... "
+      - echo "Build [pre_build] phase started..."
+      - java -version && mvn -version
+      - echo "Build [pre_build] phase completed..."
+      
+    finally:
+      - echo "End of pre-build phase."
+  build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Build [build] phase started..."
+      - mvn clean install -DskipTests -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - echo "Build [build] phase completed..."
+    finally:
+      - echo "End of build phase."
+  post_build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Build [post_build] phase started..."
+      - echo "Deploying to CloudHub with credentials stored in parameter store"
+      - mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - echo "Build [post_build] phase completed..."
+      - echo "****************************************************************************************************************"
+    finally:
+      - echo "End of post-build phase."  
+      - echo "To undeploy artifact from cloudhub"
+      - echo "mvn mule:undeploy -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar"
+artifacts:
+  files:
+    - target/temperatureapi-1.0.0-mule-application.jar
+  discard-paths: yes

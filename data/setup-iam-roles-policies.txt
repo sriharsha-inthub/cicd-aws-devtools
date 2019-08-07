@@ -1,0 +1,49 @@
+# Create a code build service role {CodeBuildServiceRole}
+aws iam create-role --role-name CodeBuildServiceRole --assume-role-policy-document file://create-role.json
+
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "CodeBuildServiceRole",
+        "RoleId": "AROATHFXJ4GL3DMWBGRPT",
+        "Arn": "arn:aws:iam::221575242135:role/CodeBuildServiceRole",
+        "CreateDate": "2019-07-16T11:23:12Z",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "codebuild.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+    }
+}
+
+# verify role created
+aws iam get-role --role-name CodeBuildServiceRole --query "Role.Arn" --output text
+aws iam get-role --role-name CodeBuildServiceRole --output json
+
+==================================================================================
+# add/put a s3 policy permission to service role {CodeBuildServiceRole}
+aws iam put-role-policy --role-name CodeBuildServiceRole --policy-name s3 --policy-document file://s3-role-policy.json
+# add/put a system manager policy permission to service role {CodeBuildServiceRole}
+aws iam put-role-policy --role-name CodeBuildServiceRole --policy-name ssm --policy-document file://ssm-role-policy.json
+# verify policy added to role
+aws iam get-role-policy --role-name CodeBuildServiceRole --policy-name s3
+aws iam get-role-policy --role-name CodeBuildServiceRole --policy-name ssm
+
+aws iam put-role-policy --role-name CodeBuildServiceRole --policy-name cloudwatch --policy-document file://cloudwatchlog-role-policy.json
+aws iam get-role-policy --role-name CodeBuildServiceRole --policy-name cloudwatch
+
+aws iam put-role-policy --role-name CodeBuildServiceRole --policy-name cachetos3 --policy-document file://cache-to-s3-role-policy.json
+aws iam get-role-policy --role-name CodeBuildServiceRole --policy-name cachetos3
+
+aws iam put-role-policy --role-name CodeBuildServiceRole --policy-name ssmparams --policy-document file://ssm-parameter-role-policy.json
+aws iam get-role-policy --role-name CodeBuildServiceRole --policy-name ssmparams
+
+
+
