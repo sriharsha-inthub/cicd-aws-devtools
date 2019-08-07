@@ -21,7 +21,7 @@ phases:
       - echo "****************************************************************************************************************"
       - wget https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip
       - unzip terraform_0.12.2_linux_amd64.zip
-      - sudo mv terraform /bin
+      - mv terraform /bin
       - rm terraform_0.12.2_linux_amd64.zip
       - apt-get update
       - apt-cache search source
