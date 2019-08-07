@@ -4,6 +4,7 @@ env:
   variables:
     TF_VAR_FILE: "1az/1az-dev.tfvars"
     TF_COMMAND: "plan"
+    TF_ACTION_CMD: "apply"
     AWS_REGION: "ap-southeast-2"
   parameter-store:
     KEY: /CodeBuild/KEY
@@ -52,6 +53,10 @@ phases:
       - echo "Validating terraform config files"
       - terraform validate
       - terraform $TF_COMMAND --var-file $TF_VAR_FILE
+      - |
+        if [ "$TF_ACTION_CMD" == "apply" ] || [ "$TF_ACTION_CMD" == "destroy" ]; then
+          terraform $TF_COMMAND --var-file $TF_VAR_FILE --auto-approve
+        fi
       - echo "======================================"
   post_build:
     run-as: root
