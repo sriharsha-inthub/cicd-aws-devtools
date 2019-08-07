@@ -51,8 +51,7 @@ phases:
     commands:
       - echo "Validating terraform config files"
       - terraform validate
-      - echo $TF_COMMAND && echo $TF_VAR_FILE
-      - echo "terraform $TF_COMMAND --var-file $TF_VAR_FILE"
+      - ls -lart
       - terraform $TF_COMMAND --var-file $TF_VAR_FILE
       - echo "======================================"
   post_build:
