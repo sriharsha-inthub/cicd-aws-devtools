@@ -55,16 +55,17 @@ phases:
       - terraform validate
       - terraform $TF_COMMAND --var-file $TF_VAR_FILE
       - |
-        if [ "$TF_ACTION_CMD" == "apply" ]; then
+        if [ "$TF_ACTION_CMD" = "apply" ]; then
           echo "############ Executing terraform command $TF_ACTION_CMD"
-          if [ "$TF_AUTO_APPROVE" == "true" ]; then
+          if [ "$TF_AUTO_APPROVE" = "true" ]; then
             terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
           else
             echo "##### Cannot apply with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
           fi
-        elif [ "$TF_ACTION_CMD" == "destroy" ]; then
+        elif [ "$TF_ACTION_CMD" = "destroy" ]; then
           echo "############ Executing terraform command $TF_ACTION_CMD"
-          if [ "$TF_AUTO_APPROVE" == "true" ]; then
+          aws s3 cp s3://setupcicd-usingterraform-incodebuild/state/state/terraform.tfstate*
+          if [ "$TF_AUTO_APPROVE" = "true" ]; then
             terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
           else
             echo "##### Cannot destroy with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
@@ -79,3 +80,8 @@ phases:
       - echo "Nothing to do in the post_build for now"
     finally:
       - echo "End of [post_build ]phase."
+      
+artifacts:
+  files:
+    - terraform.tfstate*
+  discard-paths: yes
