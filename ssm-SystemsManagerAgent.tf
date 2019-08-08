@@ -11,7 +11,7 @@ resource "aws_ssm_parameter" "cloudhubusr" {
   type        = "SecureString"
   value       = "${var.cloudhubUsrValue}"
   tier 		  = "Standard"
-  key_id	  = "${aws_kms_key.paramStoreKey.key_id}"
+  key_id	  = "${data.aws_kms_key.aws_paramStore_Key.id}"
   overwrite   = true
   tags = {
     environment = "${var.cloudhubEnv}"
@@ -27,7 +27,7 @@ resource "aws_ssm_parameter" "cloudhubpwd" {
   type        = "SecureString"
   value       = "${var.cloudhubPwdValue}"
   tier 		  = "Standard"
-  key_id	  = "${aws_kms_key.paramStoreKey.key_id}"
+  key_id	  = "${data.aws_kms_key.aws_paramStore_Key.id}"
   overwrite   = true
   tags = {
     environment = "${var.cloudhubEnv}"
@@ -43,7 +43,7 @@ resource "aws_ssm_parameter" "efs_id" {
   type        = "SecureString"
   value       = "${aws_efs_file_system.cicd_EFS.id}"
   tier 		  = "Standard"
-  key_id	  = "${aws_kms_key.paramStoreKey.key_id}"
+  key_id	  = "${data.aws_kms_key.aws_paramStore_Key.id}"
   overwrite   = true
   tags = {
     environment = "${var.efs_id}"

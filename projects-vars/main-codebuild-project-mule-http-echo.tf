@@ -9,7 +9,7 @@ resource "aws_codebuild_project" "mule-http-echo" {
   build_timeout 	= "${var.build_timeout}"
   service_role  	= "${aws_iam_role.cicd_codebuild_role.arn}"
   badge_enabled 	= true
-  encryption_key 	= "${aws_kms_key.s3Key.key_id}"
+  encryption_key 	= "${data.aws_kms_key.aws_s3_Key.id}"
   
   artifacts {
     type     		= "S3"

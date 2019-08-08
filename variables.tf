@@ -89,6 +89,12 @@ variable "availability_zone3" {
 ##### ====================================================
 ##### AWS KMS specifications  #####
 ##### ====================================================
+variable "create_kms_keys" {
+  description = "If set to true, created customer managed keys else use AWS managed keys"
+  type        = bool
+  default 	  = false
+}
+
 variable "paramStoreKeyAliasName" {}
 variable "paramStoreKeyGrantName" {}
 variable "s3KeyAliasName" {}
