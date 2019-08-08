@@ -75,6 +75,11 @@ sns_subscribe_email_addresses=["harshu.1982@gmail.com", "cicd.notification@gmail
 sns_subscribe_protocol="email"
 sns_subscribe_stack_name="SNS-Email"
 
+##### Cloudwatch events & targets
 cloudwatch_eventrule="CodeBuildStateNotificationRule"
 cloudwatch_eventrule_description="Your Build State Notification"
 cloudwatch_eventtarget_id="CodeBuildStateNotificationRule"
+
+cloudwatch_phase_eventrule="CodeBuildPhaseNotificationRule"
+cloudwatch_phase_eventrule_description="Your Build Phase Notification"
+cloudwatch_phase_eventtarget_id="CodeBuildPhaseNotificationRule"

@@ -252,6 +252,11 @@ variable "cloudwatch_eventrule" {}
 variable "cloudwatch_eventrule_description" {}
 variable "cloudwatch_eventtarget_id" {}
 
+variable "cloudwatch_phase_eventrule" {}
+variable "cloudwatch_phase_eventrule_description" {}
+variable "cloudwatch_phase_eventtarget_id" {}
+
+
 ##### ====================================================
 ##### AWS Codebuild projects enabler  #####
 ##### ====================================================

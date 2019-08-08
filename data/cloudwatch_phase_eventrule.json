@@ -1,0 +1,14 @@
+{
+  "source": [
+    "aws.codebuild"
+  ],
+  "detail-type": [
+    "CodeBuild Build Phase Change"
+  ],
+  "detail": {
+    "completed-phase": [
+      "SUBMITTED",
+      "FINALIZING"
+    ]
+  }
+}
