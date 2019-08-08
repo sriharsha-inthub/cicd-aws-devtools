@@ -3,7 +3,6 @@ version: 0.2
 env:
   variables:
     TF_VAR_FILE: "1az/1az-dev.tfvars"
-					  
     TF_ACTION_CMD: "apply"
     TF_AUTO_APPROVE: "false"
     AWS_REGION: "ap-southeast-2"
@@ -21,14 +20,14 @@ phases:
       java: openjdk8
     commands:
       - echo "****************************************************************************************************************"
-      - apt-get update >/dev/null
-      - apt-cache search source >/dev/null;
-      - apt-get install -y curl jq unzip >/dev/null;
+      - apt-get update 2>/dev/null
+      - apt-cache search source 2>/dev/null;
+      - apt-get install -y curl jq unzip 2>/dev/null;
       - echo "Downloading terraform & setup"
-      - wget https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip >/dev/null;
-      - unzip terraform_0.12.2_linux_amd64.zip >/dev/null;
-      - mv terraform /bin >/dev/null;
-      - rm terraform_0.12.2_linux_amd64.zip >/dev/null;
+      - wget https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip 2>/dev/null;
+      - unzip terraform_0.12.2_linux_amd64.zip 2>/dev/null;
+      - mv terraform /bin 2>/dev/null;
+      - rm terraform_0.12.2_linux_amd64.zip 2>/dev/null;
       - ### echo "curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq 'to_entries | [ .[] | select(.key | (contains("Expiration") or contains("RoleArn"))  | not) ] |  map(if .key == "AccessKeyId" then . + {"key":"AWS_ACCESS_KEY_ID"} else . end) | map(if .key == "SecretAccessKey" then . + {"key":"AWS_SECRET_ACCESS_KEY"} else . end) | map(if .key == "Token" then . + {"key":"AWS_SESSION_TOKEN"} else . end) | map("export \(.key)=\(.value)") | .[]' -r > /tmp/aws_cred_export.txt # work around https://github.com/hashicorp/terraform/issues/8746"
       - echo "======================================"
     finally:
@@ -58,18 +57,16 @@ phases:
       - terraform validate
       - terraform plan --var-file $TF_VAR_FILE
       - |
-        if [ "$TF_ACTION_CMD" = "apply" ] >/dev/null; then
+        if [ "$TF_ACTION_CMD" = "apply" ]; then
           echo "############ Executing terraform command $TF_ACTION_CMD"
-          if [ "$TF_AUTO_APPROVE" = "true" ] >/dev/null; then
+          if [ "$TF_AUTO_APPROVE" = "true" ]; then
             terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
           else
             echo "##### Cannot apply with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
           fi
-        elif [ "$TF_ACTION_CMD" = "destroy" ] >/dev/null; then
+        elif [ "$TF_ACTION_CMD" = "destroy" ]; then
           echo "############ Executing terraform command $TF_ACTION_CMD"
-																											 
-						   
-          if [ "$TF_AUTO_APPROVE" = "true" ] >/dev/null; then
+		      if [ "$TF_AUTO_APPROVE" = "true" ]; then
             terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
           else
             echo "##### Cannot destroy with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
