@@ -66,7 +66,7 @@ phases:
           fi
         elif [ "$TF_ACTION_CMD" = "destroy" ]; then
           echo "############ Executing terraform command $TF_ACTION_CMD"
-		      if [ "$TF_AUTO_APPROVE" = "true" ]; then
+          if [ "$TF_AUTO_APPROVE" = "true" ]; then
             terraform $TF_ACTION_CMD --var-file $TF_VAR_FILE --auto-approve
           else
             echo "##### Cannot destroy with AUTO_APPROVE as [$TF_AUTO_APPROVE]"
